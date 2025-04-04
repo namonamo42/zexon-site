@@ -13,9 +13,10 @@
       border-radius: 10px;
       border: none;
       font-size: 16px;
-      margin: 10px 0;
+      margin: 10px auto;
       width: 100%;
       max-width: 360px;
+      display: block;
     }
     .back-button {
       display: inline-block;
@@ -49,10 +50,11 @@
       "Сундук с сокровищами": null
     };
 
-    let selectedGift = "";
-    let coinAmount = 0;
     const coinRate = 5.231;
     const margin = 1.2;
+
+    let selectedGift = "";
+    let coinAmount = 0;
 
     function selectGift(name) {
       selectedGift = name;
@@ -82,28 +84,31 @@
     }
 
     async function sendGiftOrder() {
-      const link = document.getElementById("link").value;
+      const link = document.getElementById("link").value.trim();
+      const kaspi = document.getElementById("kaspi").value.trim();
+
       if (!link) return alert("Введите ссылку на эфир");
+      if (!kaspi) return alert("Введите номер Kaspi");
 
       if (selectedGift === "Сундук с сокровищами" && (coinAmount < 30 || coinAmount > 3000)) {
         return alert("Введите от 30 до 3000 монет");
       }
 
       const price = Math.round(coinAmount * coinRate * margin);
-      const message = `🎁 <b>Подарок на эфир</b>\n🎁 ${selectedGift}\n🔗 ${link}\n🪙 Монет: ${coinAmount}\n💵 Цена: ${price} ₸`;
+      const msg = `🎁 <b>Подарок на эфир</b>\n🎁 ${selectedGift}\n🔗 ${link}\n🪙 Монет: ${coinAmount}\n💵 Цена: ${price} ₸\nKaspi: ${kaspi}`;
 
       await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "HTML" })
+        body: JSON.stringify({ chat_id: chatId, text: msg, parse_mode: "HTML" })
       });
 
-      alert("✅ Заказ отправлен! После оплаты отправьте чек в Telegram.");
+      alert("✅ Заказ отправлен! Мы выставим счёт на Kaspi и свяжемся с вами.");
     }
   </script>
 </head>
 <body>
-  <h1>🎁 Подарки на эфир</h1>
+  <h1>Подарки на эфир</h1>
   <p class="desc">Выберите подарок:</p>
 
   <div id="gifts" class="container"></div>
@@ -114,18 +119,13 @@
       <input type="number" id="coins" placeholder="Количество монет (30–3000)" oninput="updateChestPrice()" />
     </div>
     <input type="text" id="link" placeholder="Ссылка на эфир TikTok" />
+    <input type="text" id="kaspi" placeholder="Номер Kaspi (GOLD/RED)" />
     <p class="desc" id="price"></p>
-
-    <p class="desc">
-      💳 Оплата KaspiGOLD/RED:<br>
-      <a href="https://pay.kaspi.kz/pay/qy6kfslc" style="color:#0f0;">https://pay.kaspi.kz/pay/qy6kfslc</a><br>
-      После оплаты отправьте чек в Telegram: <a href="https://t.me/zexonbot" style="color:red;">@zexonbot</a>
-    </p>
 
     <button class="button" onclick="sendGiftOrder()">📩 Отправить заказ</button>
   </div>
 
-  <a href="index_ru.html" class="back-button">🔙 Назад в меню</a>
+  <a href="index_ru.html" class="back-button">Назад в меню</a>
 
   <script>
     const giftContainer = document.getElementById("gifts");
