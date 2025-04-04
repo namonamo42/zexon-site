@@ -5,34 +5,67 @@
   <title>Монетизированный аккаунт — ZEXON</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
+  <style>
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    input {
+      display: block;
+      background-color: #222;
+      color: white;
+      padding: 14px;
+      border-radius: 10px;
+      border: none;
+      font-size: 16px;
+      margin: 10px auto;
+      width: 100%;
+      max-width: 360px;
+    }
+    .back-button {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 12px 20px;
+      border-radius: 12px;
+      border: 2px solid white;
+      color: white;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    .back-button:hover {
+      background-color: #ff3b3b;
+      border-color: #ff3b3b;
+      color: white;
+    }
+  </style>
   <script>
+    const token = "7898630945:AAGRorhRoEt_XJS628vM4VoWJkq5N-xjAnc";
+    const chatId = "1124467370";
+    const price = 6000;
+
     async function sendOrder() {
-      const token = "7898630945:AAGRorhRoEt_XJS628vM4VoWJkq5N-xjAnc";
-      const chatId = "1124467370";
-      const message = `<b>Заказ: Монетизированный аккаунт</b>\nЦена: 6000 ₸`;
-      const url = `https://api.telegram.org/bot${token}/sendMessage`;
-      await fetch(url, {
+      const kaspi = document.getElementById("kaspi").value.trim();
+      if (!kaspi) return alert("Введите номер Kaspi");
+
+      const msg = `👤 <b>Монетизированный аккаунт</b>\n💵 Цена: ${price} ₸\n📱 Kaspi: ${kaspi}`;
+
+      await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "HTML" })
+        body: JSON.stringify({ chat_id: chatId, text: msg, parse_mode: "HTML" })
       });
-      alert("✅ Заказ отправлен! После оплаты отправьте чек в Telegram.");
+
+      alert("✅ Заказ отправлен! Мы выставим счёт на Kaspi.");
     }
   </script>
 </head>
 <body>
   <div class="container">
-    <h1>Монетизированный аккаунт</h1>
-    <p>Готовый TikTok аккаунт с включённой монетизацией.</p>
-    <p><strong>Цена: 6000 ₸</strong></p>
-    <p>
-      💳 Оплата KaspiGOLD/RED:<br>
-      <a href="https://pay.kaspi.kz/pay/qy6kfslc" style="color:#0f0;">https://pay.kaspi.kz/pay/qy6kfslc</a><br><br>
-      После оплаты отправьте чек в Telegram:<br>
-      <a href="https://t.me/zexonbot" style="color:#ff0000;">@zexonbot</a>
-    </p>
-    <a class="button" href="#" onclick="sendOrder()">Отправить заказ</a>
-    <a class="button" href="index_ru.html">Назад в меню</a>
+    <h1>👤 Монетизированный аккаунт</h1>
+    <p class="desc">Цена: <b>6 000 ₸</b></p>
+    <input type="text" id="kaspi" placeholder="Введите номер Kaspi (GOLD/RED)" />
+    <button class="button" onclick="sendOrder()">📩 Заказать</button>
+    <a class="back-button" href="index_ru.html">🔙 Назад в меню</a>
   </div>
 </body>
 </html>
