@@ -2,60 +2,125 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Автолайкер трансляций — ZEXON</title>
+  <title>Покупка бота — ZEXON</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
+  <style>
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    input {
+      display: block;
+      background-color: #222;
+      color: white;
+      padding: 14px;
+      border-radius: 10px;
+      border: none;
+      font-size: 16px;
+      margin: 10px auto;
+      width: 100%;
+      max-width: 360px;
+    }
+    .back-button {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 12px 20px;
+      border-radius: 12px;
+      border: 2px solid white;
+      color: white;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    .back-button:hover {
+      background-color: #ff3b3b;
+      border-color: #ff3b3b;
+      color: white;
+    }
+    #emailField, #telegramField {
+      display: none;
+    }
+  </style>
   <script>
     const token = "7898630945:AAGRorhRoEt_XJS628vM4VoWJkq5N-xjAnc";
     const chatId = "1124467370";
-    let selected = "";
+    let selectedBot = "";
     let price = 0;
+    let deliveryMethod = "";
 
     function choose(version) {
+      const emailField = document.getElementById("emailField");
+      const telegramField = document.getElementById("telegramField");
+
       if (version === 'exe') {
-        selected = "EXE версия";
+        selectedBot = "EXE версия";
         price = 15000;
+        deliveryMethod = "email";
+        emailField.style.display = "block";
+        telegramField.style.display = "none";
       } else {
-        selected = "Серверная версия";
+        selectedBot = "Серверная версия";
         price = 20000;
+        deliveryMethod = "telegram";
+        telegramField.style.display = "block";
+        emailField.style.display = "none";
       }
-      document.getElementById("price").innerText = `Вы выбрали: ${selected} — ${price} ₸`;
-      document.getElementById("payblock").style.display = "block";
+
+      document.getElementById("selected").innerText = `Вы выбрали: ${selectedBot} — ${price} ₸`;
+      document.getElementById("formblock").style.display = "block";
     }
 
-    async function sendToTelegram() {
-      const message = `💳 <b>Заказ на бота</b>\n\nАвтолайкер трансляций\nВерсия: ${selected}\n💰 Цена: ${price} ₸`;
-      const url = `https://api.telegram.org/bot${token}/sendMessage`;
-      await fetch(url, {
+    async function sendOrder() {
+      const kaspi = document.getElementById("kaspi").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const telegram = document.getElementById("telegram").value.trim();
+
+      if (!kaspi) return alert("Введите номер Kaspi");
+
+      let contact = "";
+      if (deliveryMethod === "email") {
+        if (!email) return alert("Введите e-mail для выдачи EXE-версии");
+        contact = `E-mail: ${email}`;
+      } else {
+        if (!telegram) return alert("Введите Telegram для выдачи ссылки");
+        contact = `Telegram: ${telegram}`;
+      }
+
+      const msg = `<b>Покупка бота</b>\nБот: Автолайкер трансляций\nВерсия: ${selectedBot}\nЦена: ${price} ₸\nKaspi: ${kaspi}\nКуда выдать: ${contact}`;
+
+      await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "HTML" })
+        body: JSON.stringify({ chat_id: chatId, text: msg, parse_mode: "HTML" })
       });
 
-      alert("✅ Заказ отправлен! После оплаты отправьте чек в Telegram.");
+      alert("✅ Заказ отправлен! Мы выставим счёт на Kaspi и свяжемся с вами.");
     }
   </script>
 </head>
 <body>
   <div class="container">
-    <h1>Автолайкер трансляций</h1>
-    <p>Выберите версию для покупки:</p>
+    <h1>Покупка бота</h1>
+    <p>Выберите версию:</p>
 
-    <a class="button" href="#" onclick="choose('exe')">EXE версия — 15 000 ₸</a>
-    <a class="button" href="#" onclick="choose('server')">Серверная версия — 20 000 ₸</a>
+    <button class="button" onclick="choose('exe')">EXE версия — 15 000 ₸</button>
+    <button class="button" onclick="choose('server')">Серверная версия — 20 000 ₸</button>
 
-    <div id="payblock" style="display:none;">
-      <p id="price" class="price"></p>
-      <p>
-        💳 Оплата через KaspiGOLD/RED:<br>
-        <a href="https://pay.kaspi.kz/pay/qy6kfslc" style="color:#0f0;">https://pay.kaspi.kz/pay/qy6kfslc</a><br><br>
-        После оплаты отправьте чек в Telegram:<br>
-        <a href="https://t.me/zexonbot" style="color:#ff0000;">@zexonbot</a>
-      </p>
-      <a class="button" href="#" onclick="sendToTelegram()">Отправить заказ</a>
+    <div id="formblock" style="display:none;">
+      <p id="selected" class="desc"></p>
+      <input type="text" id="kaspi" placeholder="Введите номер Kaspi (GOLD/RED)" />
+
+      <div id="emailField">
+        <input type="text" id="email" placeholder="Введите e-mail" />
+      </div>
+      <div id="telegramField">
+        <input type="text" id="telegram" placeholder="Введите Telegram" />
+      </div>
+
+      <button class="button" onclick="sendOrder()">Отправить заказ</button>
     </div>
 
-    <a class="button" href="index_ru.html">Назад в меню</a>
+    <a class="back-button" href="index_ru.html">Назад в меню</a>
   </div>
 </body>
 </html>
