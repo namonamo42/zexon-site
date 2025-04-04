@@ -1,0 +1,41 @@
+/* style.css */
+body {
+  background-color: #000;
+  color: #fff;
+  font-family: 'Arial', sans-serif;
+  text-align: center;
+  padding: 30px 15px;
+}
+
+h1 {
+  font-size: 26px;
+  margin-bottom: 10px;
+}
+
+p {
+  font-size: 16px;
+  margin-bottom: 25px;
+}
+
+.container {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.button {
+  display: block;
+  background-color: #222;
+  color: white;
+  padding: 14px;
+  margin: 10px auto;
+  border-radius: 12px;
+  text-decoration: none;
+  font-size: 16px;
+  transition: background 0.3s;
+  max-width: 100%;
+}
+
+.button:hover {
+  background-color: #ff3b3b;
+  color: #fff;
+}

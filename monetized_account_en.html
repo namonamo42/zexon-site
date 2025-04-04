@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Monetized TikTok Account — ZEXON</title>
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    const token = "7898630945:AAGRorhRoEt_XJS628vM4VoWJkq5N-xjAnc";
+    const chatId = "1124467370";
+
+    async function sendOrder() {
+      const message = `👤 <b>Monetized TikTok Account</b>\n💵 Price: $12`;
+      await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "HTML" })
+      });
+
+      alert("✅ Order sent! Please send your payment receipt via Telegram.");
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>👤 Monetized TikTok Account</h1>
+    <p>Fully prepared TikTok account with monetization enabled.</p>
+    <p><b>💵 Price: $12</b></p>
+
+    <p>
+      💳 Pay via Crypto or Kaspi:<br>
+      <a href="https://pay.kaspi.kz/pay/qy6kfslc" style="color:#0f0;">https://pay.kaspi.kz/pay/qy6kfslc</a><br>
+      After payment, send receipt to <a href="https://t.me/zexonbot" style="color:#ff3b3b;">@zexonbot</a>
+    </p>
+
+    <a class="button" onclick="sendOrder()">Send Order</a>
+    <a class="button" href="index_en.html">Back to Menu</a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Выбор языка — ZEXON</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 30px;
+    }
+
+    .button {
+      padding: 15px 40px;
+      font-size: 18px;
+      border: 2px solid #fff;
+      border-radius: 10px;
+      color: white;
+      background: transparent;
+      cursor: pointer;
+      margin: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .button:hover {
+      background-color: #ff0000;
+      border-color: #ff0000;
+    }
+  </style>
+</head>
+<body>
+  <h1>Выберите язык / Choose Language</h1>
+  <button class="button" onclick="location.href='index_ru.html'">🇷🇺 Русский</button>
+  <button class="button" onclick="location.href='index_en.html'">🇺🇸 English</button>
+</body>
+</html>

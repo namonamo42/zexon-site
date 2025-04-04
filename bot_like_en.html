@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Live Auto-Liker — ZEXON</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    const token = "7898630945:AAGRorhRoEt_XJS628vM4VoWJkq5N-xjAnc";
+    const chatId = "1124467370";
+    let selected = "";
+    let price = 0;
+
+    function choose(version) {
+      if (version === 'exe') {
+        selected = "EXE version";
+        price = 30;
+      } else {
+        selected = "Server version";
+        price = 40;
+      }
+      document.getElementById("price").innerText = `You selected: ${selected} — $${price}`;
+      document.getElementById("payblock").style.display = "block";
+    }
+
+    async function sendToTelegram() {
+      const message = `💳 <b>Bot Order</b>\n\nLive Auto-Liker\nVersion: ${selected}\n💰 Price: $${price}`;
+      const url = `https://api.telegram.org/bot${token}/sendMessage`;
+      await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "HTML" })
+      });
+
+      alert("✅ Order sent! After payment, send the receipt in Telegram.");
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>Live Auto-Liker</h1>
+    <p>Select the version to purchase:</p>
+
+    <a class="button" href="#" onclick="choose('exe')">EXE version — $30</a>
+    <a class="button" href="#" onclick="choose('server')">Server version — $40</a>
+
+    <div id="payblock" style="display:none;">
+      <p id="price" class="price"></p>
+      <p>
+        💳 Payment via KaspiGOLD/RED:<br>
+        <a href="https://pay.kaspi.kz/pay/qy6kfslc" style="color:#0f0;">https://pay.kaspi.kz/pay/qy6kfslc</a><br><br>
+        After payment, send the receipt in Telegram:<br>
+        <a href="https://t.me/zexonbot" style="color:#ff0000;">@zexonbot</a>
+      </p>
+      <a class="button" href="#" onclick="sendToTelegram()">Send Order</a>
+    </div>
+
+    <a class="button" href="index_en.html">Back to Menu</a>
+  </div>
+</body>
+</html>

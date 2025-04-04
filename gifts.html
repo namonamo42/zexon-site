@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Подарки на эфир — ZEXON</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    input {
+      background-color: #222;
+      color: white;
+      padding: 14px;
+      border-radius: 10px;
+      border: none;
+      font-size: 16px;
+      margin: 10px 0;
+      width: 100%;
+      max-width: 360px;
+    }
+    .back-button {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 12px 20px;
+      border-radius: 12px;
+      border: 2px solid white;
+      color: white;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    .back-button:hover {
+      background-color: #ff3b3b;
+      border-color: #ff3b3b;
+      color: white;
+    }
+  </style>
+  <script>
+    const token = "7898630945:AAGRorhRoEt_XJS628vM4VoWJkq5N-xjAnc";
+    const chatId = "1124467370";
+
+    const gifts = {
+      "Корона": 100,
+      "Деньгопушка": 500,
+      "Вечная роза": 399,
+      "Фейерверк": 1088,
+      "Спорткар": 7000,
+      "Частный самолет": 4888,
+      "Шатл TikTok": 20000,
+      "Закатное шоссе": 10000,
+      "Сундук с сокровищами": null
+    };
+
+    let selectedGift = "";
+    let coinAmount = 0;
+    const coinRate = 5.231;
+    const margin = 1.2;
+
+    function selectGift(name) {
+      selectedGift = name;
+      coinAmount = gifts[name] || 0;
+
+      document.getElementById("step2").style.display = "block";
+      document.getElementById("giftname").innerText = name;
+      document.getElementById("customCoins").style.display = name === "Сундук с сокровищами" ? "block" : "none";
+
+      if (name !== "Сундук с сокровищами") {
+        const price = Math.round(coinAmount * coinRate * margin);
+        document.getElementById("price").innerText = `💰 Цена: ${price} ₸`;
+      } else {
+        document.getElementById("price").innerText = "";
+      }
+    }
+
+    function updateChestPrice() {
+      const value = parseInt(document.getElementById("coins").value);
+      if (value >= 30 && value <= 3000) {
+        const price = Math.round(value * coinRate * margin);
+        document.getElementById("price").innerText = `💰 Цена: ${price} ₸`;
+        coinAmount = value;
+      } else {
+        document.getElementById("price").innerText = "⚠️ Введите от 30 до 3000 монет";
+      }
+    }
+
+    async function sendGiftOrder() {
+      const link = document.getElementById("link").value;
+      if (!link) return alert("Введите ссылку на эфир");
+
+      if (selectedGift === "Сундук с сокровищами" && (coinAmount < 30 || coinAmount > 3000)) {
+        return alert("Введите от 30 до 3000 монет");
+      }
+
+      const price = Math.round(coinAmount * coinRate * margin);
+      const message = `🎁 <b>Подарок на эфир</b>\n🎁 ${selectedGift}\n🔗 ${link}\n🪙 Монет: ${coinAmount}\n💵 Цена: ${price} ₸`;
+
+      await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "HTML" })
+      });
+
+      alert("✅ Заказ отправлен! После оплаты отправьте чек в Telegram.");
+    }
+  </script>
+</head>
+<body>
+  <h1>🎁 Подарки на эфир</h1>
+  <p class="desc">Выберите подарок:</p>
+
+  <div id="gifts" class="container"></div>
+
+  <div id="step2" style="display:none;">
+    <p class="desc">Вы выбрали: <b id="giftname"></b></p>
+    <div id="customCoins" style="display:none;">
+      <input type="number" id="coins" placeholder="Количество монет (30–3000)" oninput="updateChestPrice()" />
+    </div>
+    <input type="text" id="link" placeholder="Ссылка на эфир TikTok" />
+    <p class="desc" id="price"></p>
+
+    <p class="desc">
+      💳 Оплата KaspiGOLD/RED:<br>
+      <a href="https://pay.kaspi.kz/pay/qy6kfslc" style="color:#0f0;">https://pay.kaspi.kz/pay/qy6kfslc</a><br>
+      После оплаты отправьте чек в Telegram: <a href="https://t.me/zexonbot" style="color:red;">@zexonbot</a>
+    </p>
+
+    <button class="button" onclick="sendGiftOrder()">📩 Отправить заказ</button>
+  </div>
+
+  <a href="index_ru.html" class="back-button">🔙 Назад в меню</a>
+
+  <script>
+    const giftContainer = document.getElementById("gifts");
+    Object.keys(gifts).forEach(gift => {
+      const div = document.createElement("div");
+      div.className = "button";
+      div.innerText = gift;
+      div.onclick = () => selectGift(gift);
+      giftContainer.appendChild(div);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coin Collector Bot — ZEXON</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    const token = "7898630945:AAGRorhRoEt_XJS628vM4VoWJkq5N-xjAnc";
+    const chatId = "1124467370";
+    let selected = "";
+    let price = 0;
+
+    function choose(version) {
+      if (version === 'exe') {
+        selected = "EXE version";
+        price = 40;
+      } else {
+        selected = "Server version";
+        price = 60;
+      }
+      document.getElementById("price").innerText = `You selected: ${selected} — $${price}`;
+      document.getElementById("payblock").style.display = "block";
+    }
+
+    async function sendToTelegram() {
+      const message = `💳 <b>Bot Order</b>\n\nCoin Collector Bot\nVersion: ${selected}\n💰 Price: $${price}`;
+      const url = `https://api.telegram.org/bot${token}/sendMessage`;
+      await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "HTML" })
+      });
+
+      alert("✅ Order sent! After payment, send the receipt in Telegram.");
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>Coin Collector Bot</h1>
+    <p>Select the version to purchase:</p>
+
+    <a class="button" href="#" onclick="choose('exe')">EXE version — $40</a>
+    <a class="button" href="#" onclick="choose('server')">Server version — $60</a>
+
+    <div id="payblock" style="display:none;">
+      <p class="price" id="price"></p>
+      <p class="description">
+        💳 Payment via Crypto (USDT):<br>
+        <a href="https://t.me/zexonbot" style="color:#0f0;">Contact @zexonbot for payment</a><br><br>
+        After payment, send the receipt in Telegram:<br>
+        <a href="https://t.me/zexonbot" style="color:#ff0000;">@zexonbot</a>
+      </p>
+      <a class="button" href="#" onclick="sendToTelegram()">Send Order</a>
+    </div>
+
+    <a href="index_en.html" class="button">Back to Menu</a>
+  </div>
+</body>
+</html>

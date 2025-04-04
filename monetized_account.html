@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Монетизированный аккаунт — ZEXON</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    async function sendOrder() {
+      const token = "7898630945:AAGRorhRoEt_XJS628vM4VoWJkq5N-xjAnc";
+      const chatId = "1124467370";
+      const message = `<b>Заказ: Монетизированный аккаунт</b>\nЦена: 6000 ₸`;
+      const url = `https://api.telegram.org/bot${token}/sendMessage`;
+      await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "HTML" })
+      });
+      alert("✅ Заказ отправлен! После оплаты отправьте чек в Telegram.");
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>Монетизированный аккаунт</h1>
+    <p>Готовый TikTok аккаунт с включённой монетизацией.</p>
+    <p><strong>Цена: 6000 ₸</strong></p>
+    <p>
+      💳 Оплата KaspiGOLD/RED:<br>
+      <a href="https://pay.kaspi.kz/pay/qy6kfslc" style="color:#0f0;">https://pay.kaspi.kz/pay/qy6kfslc</a><br><br>
+      После оплаты отправьте чек в Telegram:<br>
+      <a href="https://t.me/zexonbot" style="color:#ff0000;">@zexonbot</a>
+    </p>
+    <a class="button" href="#" onclick="sendOrder()">Отправить заказ</a>
+    <a class="button" href="index_ru.html">Назад в меню</a>
+  </div>
+</body>
+</html>

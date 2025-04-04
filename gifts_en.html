@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Live Gifts — ZEXON</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    input {
+      background-color: #222;
+      color: white;
+      padding: 14px;
+      border-radius: 10px;
+      border: none;
+      font-size: 16px;
+      margin: 10px 0;
+      width: 100%;
+      max-width: 360px;
+    }
+    .back-button {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 12px 20px;
+      border-radius: 12px;
+      border: 2px solid white;
+      color: white;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    .back-button:hover {
+      background-color: #ff3b3b;
+      border-color: #ff3b3b;
+      color: white;
+    }
+  </style>
+  <script>
+    const token = "7898630945:AAGRorhRoEt_XJS628vM4VoWJkq5N-xjAnc";
+    const chatId = "1124467370";
+
+    const gifts = {
+      "Crown": 100,
+      "Money Gun": 500,
+      "Eternal Rose": 399,
+      "Fireworks": 1088,
+      "Sports Car": 7000,
+      "Private Jet": 4888,
+      "TikTok Shuttle": 20000,
+      "Sunset Highway": 10000,
+      "Treasure Chest": null
+    };
+
+    let selectedGift = "";
+    let coinAmount = 0;
+    const coinRateUSD = 0.0139; // 5.231 * 1.2 = ~6.277 тенге -> ~0.0139 USD
+    const margin = 1.2;
+
+    function selectGift(name) {
+      selectedGift = name;
+      coinAmount = gifts[name] || 0;
+
+      document.getElementById("step2").style.display = "block";
+      document.getElementById("giftname").innerText = name;
+      document.getElementById("customCoins").style.display = name === "Treasure Chest" ? "block" : "none";
+
+      if (name !== "Treasure Chest") {
+        const price = (coinAmount * coinRateUSD).toFixed(2);
+        document.getElementById("price").innerText = `💰 Price: $${price}`;
+      } else {
+        document.getElementById("price").innerText = "";
+      }
+    }
+
+    function updateChestPrice() {
+      const value = parseInt(document.getElementById("coins").value);
+      if (value >= 30 && value <= 3000) {
+        const price = (value * coinRateUSD).toFixed(2);
+        document.getElementById("price").innerText = `💰 Price: $${price}`;
+        coinAmount = value;
+      } else {
+        document.getElementById("price").innerText = "⚠️ Enter between 30 and 3000 coins";
+      }
+    }
+
+    async function sendGiftOrder() {
+      const link = document.getElementById("link").value;
+      if (!link) return alert("Please enter the TikTok live link");
+
+      if (selectedGift === "Treasure Chest" && (coinAmount < 30 || coinAmount > 3000)) {
+        return alert("Enter between 30 and 3000 coins");
+      }
+
+      const price = (coinAmount * coinRateUSD).toFixed(2);
+      const message = `🎁 <b>Live Gift</b>\n🎁 ${selectedGift}\n🔗 ${link}\n🪙 Coins: ${coinAmount}\n💵 Price: $${price}`;
+
+      await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "HTML" })
+      });
+
+      alert("✅ Order sent! After payment, send the receipt in Telegram.");
+    }
+  </script>
+</head>
+<body>
+  <h1>🎁 Live Gifts</h1>
+  <p class="desc">Choose a gift:</p>
+
+  <div id="gifts" class="container"></div>
+
+  <div id="step2" style="display:none;">
+    <p class="desc">You selected: <b id="giftname"></b></p>
+    <div id="customCoins" style="display:none;">
+      <input type="number" id="coins" placeholder="Coin amount (30–3000)" oninput="updateChestPrice()" />
+    </div>
+    <input type="text" id="link" placeholder="TikTok live stream link" />
+    <p class="desc" id="price"></p>
+
+    <p class="desc">
+      💳 Payment via KaspiGOLD/RED:<br>
+      <a href="https://pay.kaspi.kz/pay/qy6kfslc" style="color:#0f0;">https://pay.kaspi.kz/pay/qy6kfslc</a><br>
+      After payment, send the receipt in Telegram: <a href="https://t.me/zexonbot" style="color:red;">@zexonbot</a>
+    </p>
+
+    <button class="button" onclick="sendGiftOrder()">📩 Send Order</button>
+  </div>
+
+  <a href="index_en.html" class="back-button">🔙 Back to Menu</a>
+
+  <script>
+    const giftContainer = document.getElementById("gifts");
+    Object.keys(gifts).forEach(gift => {
+      const div = document.createElement("div");
+      div.className = "button";
+      div.innerText = gift;
+      div.onclick = () => selectGift(gift);
+      giftContainer.appendChild(div);
+    });
+  </script>
+</body>
+</html>
