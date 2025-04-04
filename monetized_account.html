@@ -50,7 +50,7 @@
       if (!kaspi) return alert("Введите номер Kaspi");
       if (!contact) return alert("Укажите, куда выдать (Telegram или Email)");
 
-      const msg = `👤 <b>Монетизированный аккаунт</b>\n💵 Цена: ${price} ₸\n📱 Kaspi: ${kaspi}\n📬 Куда выдать: ${contact}`;
+      const msg = `<b>Монетизированный аккаунт</b>\nЦена: ${price} ₸\nKaspi: ${kaspi}\nКуда выдать: ${contact}`;
 
       await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
         method: "POST",
@@ -58,18 +58,18 @@
         body: JSON.stringify({ chat_id: chatId, text: msg, parse_mode: "HTML" })
       });
 
-      alert("✅ Заказ отправлен! Мы выставим счёт на Kaspi и свяжемся с вами.");
+      alert("Заказ отправлен! Мы выставим счёт на Kaspi и свяжемся с вами.");
     }
   </script>
 </head>
 <body>
   <div class="container">
-    <h1>👤 Монетизированный аккаунт</h1>
+    <h1>Монетизированный аккаунт</h1>
     <p class="desc">Цена: <b>6 000 ₸</b></p>
     <input type="text" id="kaspi" placeholder="Введите номер Kaspi (GOLD/RED)" />
     <input type="text" id="contact" placeholder="Куда выдать (Telegram или Email)" />
-    <button class="button" onclick="sendOrder()">📩 Заказать</button>
-    <a class="back-button" href="index_ru.html">🔙 Назад в меню</a>
+    <button class="button" onclick="sendOrder()">Отправить заказ</button>
+    <a class="back-button" href="index_ru.html">Назад в меню</a>
   </div>
 </body>
 </html>
